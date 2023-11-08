@@ -13,7 +13,7 @@ public class GestionarTurnos extends BasicSubWindow {
 		super("Gestionar turnos");
         setLayout(new BorderLayout());
 
-		var jscrollPanel = new JScrollPane(Turnos.getListaTurnos());
+		var jscrollPanel = new JScrollPane(Turnos.getList());
 		jscrollPanel.setBackground(colorNegro);
 
         add(jscrollPanel, BorderLayout.CENTER);
@@ -22,12 +22,6 @@ public class GestionarTurnos extends BasicSubWindow {
         var agregarButton = new Button("Agregar Turno");
         var desagendarButton = new Button("Desagendar Turno");
         var desagendarTodoButton = new Button("Desagendar todos los Turnos");
-
-        botonPanel.add(agregarButton);
-        botonPanel.add(desagendarButton);
-        botonPanel.add(desagendarTodoButton);
-		botonPanel.setBackground(colorNegro);
-        add(botonPanel, BorderLayout.SOUTH);
 
         agregarButton.addActionListener(e -> {
 			var fechaField = new JTextField(10);
@@ -40,7 +34,7 @@ public class GestionarTurnos extends BasicSubWindow {
 			inputPanel.add(turnoField);
 
 			var result = JOptionPane.showConfirmDialog(
-					this,
+					null,
 					inputPanel,
 					"Ingrese la fecha y detalles del turno",
 					JOptionPane.OK_CANCEL_OPTION
@@ -57,27 +51,58 @@ public class GestionarTurnos extends BasicSubWindow {
 				} catch (ParseException ex) {
 					ex.printStackTrace();
 				}
-
 				assert d != null;
 				var fecha = new java.sql.Date(d.getTime());
-				var turno = new Turno(fecha, detalles);
-				Turnos.add(turno);
+				Turnos.add(new Turno(fecha, detalles));
+				
 			}
+			
+			refresh();
 		});
         
         desagendarButton.addActionListener(e -> {
-			var t = Turnos.getTurnoSeleccionado();
-			if (t != null) {
-				Turnos.delete(t);
-			}
-		});
+            var t = Turnos.getTurnoSeleccionado();
+            if (t != null) {
+                var confirmacion = JOptionPane.showConfirmDialog(
+                        this,
+                        "¿Estas seguro que deseas desagendar este turno?",
+                        "Confirmar desagendacion",
+                        JOptionPane.YES_NO_OPTION
+                );
+                
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    Turnos.delete(t);
+					JOptionPane.showMessageDialog(this, "Turno desagendado correctamente.",
+							"Turno Desagendado", JOptionPane.INFORMATION_MESSAGE);
+					refresh();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecciona un turno para desagendar.",
+                		"Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         
         desagendarTodoButton.addActionListener(e -> {
-			for (var t : Turnos.toArray()) {
+			for (var t : Turnos.getTurnosModel()) {
 				if (t != null) {
 					Turnos.delete(t);
 				}
 			}
+			
+			refresh();
 		});
+        
+        botonPanel.add(agregarButton);
+        botonPanel.add(desagendarButton);
+        botonPanel.add(desagendarTodoButton);
+		botonPanel.setBackground(colorNegro);
+        add(botonPanel, BorderLayout.SOUTH);
+    }
+    
+    private void refresh() {
+    	dispose();
+    	var w = new GestionarTurnos();
+    	w.run();
     }
 }

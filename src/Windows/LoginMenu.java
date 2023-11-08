@@ -1,15 +1,12 @@
 package Windows;
 
-import Windows.Interfaz;
 import utils.*;
 
 import javax.swing.*;
 import java.sql.SQLException;
 
 public class LoginMenu extends BasicWindow {
-	private static final String s_user = "admin";
-	private static final String s_password = "admin";
-	private static final boolean s_debugMode = true;
+	private static final boolean s_debugMode = false;
 
 	public static int idPersonal;
 
@@ -30,19 +27,18 @@ public class LoginMenu extends BasicWindow {
 			var username = usernameField.getText();
 			var passwordChars = passwordField.getPassword();
 			var password = new String(passwordChars);
+			
+			var fullName = username + "_" + password;
 
 			var id = -1;
 
 			try {
-				id = Database.obtenerIdPersonal(username);
+				id = Database.obtenerIdPersonal(fullName);
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
 
-			var isValid = id != -1;
-			var debug = s_debugMode && (username.isEmpty() && password.isEmpty());
-
-			if (isValid || debug) {
+			if (id != -1 || s_debugMode) {
 				var w = new Interfaz();
 				w.run();
 				dispose();

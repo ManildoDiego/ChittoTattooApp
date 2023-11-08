@@ -29,21 +29,21 @@ public class Precios extends BasicSubWindow {
         final var xTattoo = 300;
 
         addText("Piercings:", xPiercing, 76);
-        addText("-Helix 5k", xPiercing, 96);
-        addText("-Septum 4k", xPiercing, 116);
-        addText("-Tragus 4k", xPiercing, 136);
-        addText("-Snake bites 8k", xPiercing, 156);
-        addText("-Nostril 2k", xPiercing, 176);
-        addText("-Bridge 5k", xPiercing, 196);
-        addText("-Ceja 3k", xPiercing, 216);
+        addText("-Helix $5000", xPiercing, 96);
+        addText("-Septum $4000", xPiercing, 116);
+        addText("-Tragus $4000", xPiercing, 136);
+        addText("-Snake bites $8000", xPiercing, 156);
+        addText("-Nostril $2000", xPiercing, 176);
+        addText("-Bridge $5000", xPiercing, 196);
+        addText("-Ceja $3000", xPiercing, 216);
 
         addText("Tattoos:", xTattoo, 76);
-        addText("-Flash tattoo 5k", xTattoo, 96);
-        addText("-Old school 15k", xTattoo, 116);
-        addText("-Neo tradicional 25k", xTattoo, 136);
-        addText("-Realismo 35k", xTattoo, 156);
-        addText("-Japoneses 25k", xTattoo, 176);
-        addText("-Letras 10", xTattoo, 196);
+        addText("-Flash tattoo $5000", xTattoo, 96);
+        addText("-Old school $15000", xTattoo, 116);
+        addText("-Neo tradicional $25000", xTattoo, 136);
+        addText("-Realismo $35000", xTattoo, 156);
+        addText("-Japoneses $25000", xTattoo, 176);
+        addText("-Letras $10000", xTattoo, 196);
     }
 }
 

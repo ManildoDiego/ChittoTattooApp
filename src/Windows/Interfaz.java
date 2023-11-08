@@ -5,7 +5,6 @@ import utils.Button;
 import utils.Label;
 
 import java.awt.Font;
-import java.io.IOException;
 
 public class Interfaz extends BasicWindow {
 	public Interfaz() {

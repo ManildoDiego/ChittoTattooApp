@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class TurnosAgendados extends BasicSubWindow {
@@ -63,9 +62,6 @@ public class TurnosAgendados extends BasicSubWindow {
 
 	private void updateCalendar(JLabel monthLabel, JPanel calendarPanel) {
 		m_calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-		final var month = m_calendar.get(Calendar.MONTH);
-		final var year = m_calendar.get(Calendar.YEAR);
 
 		var sdf = new SimpleDateFormat("MMMM yyyy");
 		monthLabel.setText(sdf.format(m_calendar.getTime()));

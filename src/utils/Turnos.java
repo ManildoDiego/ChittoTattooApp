@@ -1,36 +1,37 @@
 package utils;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
 public class Turnos implements IColors {
-	private static Turno[] getTurnosModel() {
-		List<Turno> t = null;
-		try {
-			t = Database.obtenerTurnos();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public static Turno[] getTurnosModel() {
+	    List<Turno> turnosList = null;
+	    try {
+	        turnosList = Database.obtenerTurnos();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 
-		assert t != null;
-		var turnosArray = new Turno[t.size()];
-		turnosArray = t.toArray(turnosArray);
-		return turnosArray;
+	    if (turnosList != null) {
+	        Turno[] turnosArray = new Turno[turnosList.size()];
+	        turnosArray = turnosList.toArray(turnosArray);
+	        return turnosArray;
+	    } else {
+	        return new Turno[0];
+	    }
 	}
 
-	public static JList getListaTurnos() {
-		var turnosModel = getTurnosModel();
-		var list = new JList(turnosModel);
+	public static JList<Turno> getList() {
+		var list = new JList<Turno>(getTurnosModel());
 		list.setBackground(colorNegro);
 		list.setForeground(colorVioleta);
 		return list;
 	}
 
 	public static Turno getTurnoSeleccionado() {
-		return (Turno) getListaTurnos().getSelectedValue();
+		return getList().getSelectedValue();
 	}
 
 	public static void add(Turno nuevoTurno) {
@@ -43,10 +44,6 @@ public class Turnos implements IColors {
 
 	public static void delete(Turno t) {
 		Database.deleteTurno(t);
-	}
-
-	public static Turno[] toArray() {
-		return getTurnosModel();
 	}
 
 	public static Object[] GetTurnos(Date fecha) {
@@ -62,5 +59,9 @@ public class Turnos implements IColors {
 
 	public static boolean isEmpty() {
 		return getTurnosModel().length == 0;
+	}
+	
+	public static void refreshList() {
+		getList();
 	}
 }

@@ -15,8 +15,8 @@ public class Database {
 	}
 
 	public static void insertarDatosPersonal(String nombre, String direccion, int telefono) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call insertar_datos_p(?, ?, ?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call insertar_datos_p(?, ?, ?)}")) {
 			statement.setString(1, nombre);
 			statement.setString(2, direccion);
 			statement.setInt(3, telefono);
@@ -25,8 +25,8 @@ public class Database {
 	}
 
 	public static void insertarDatosTurno(Date fecha, String detalles) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call insertar_datos_t(?, ?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call insertar_datos_t(?, ?)}")) {
 			statement.setDate(1, fecha);
 			statement.setString(2, detalles);
 			statement.execute();
@@ -34,8 +34,8 @@ public class Database {
 	}
 
 	public static void insertarDatosFactura(float monto, int personalId) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call insertar_datos_f(?, ?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call insertar_datos_f(?, ?)}")) {
 			statement.setFloat(1, monto);
 			statement.setInt(2, personalId);
 			statement.execute();
@@ -43,10 +43,10 @@ public class Database {
 	}
 
 	public static String obtenerNombrePersonal(int personalId) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call nombre_personal(?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call nombre_personal(?)}")) {
 			statement.setInt(1, personalId);
-			var resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getString("nombre");
 			}
@@ -55,10 +55,10 @@ public class Database {
 	}
 
 	public static Timestamp obtenerFechaTurno(int turnoId) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call fecha_turno(?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call fecha_turno(?)}")) {
 			statement.setInt(1, turnoId);
-			var resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getTimestamp("fecha");
 			}
@@ -67,10 +67,10 @@ public class Database {
 	}
 
 	public static int obtenerIdPersonal(String nombre) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call obtenerIdPersonal(?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call obtenerIdPersonal(?)}")) {
 			statement.setString(1, nombre);
-			var resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getInt("id");
 			}
@@ -79,10 +79,10 @@ public class Database {
 	}
 
 	public static String obtenerDetallesTurno(int turnoId) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call detalles_turno(?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call detalles_turno(?)}")) {
 			statement.setInt(1, turnoId);
-			var resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getString("detalles");
 			}
@@ -91,10 +91,10 @@ public class Database {
 	}
 
 	public static Timestamp obtenerFechaEmisionFactura(int facturaId) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call fecha_emision_f(?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call fecha_emision_f(?)}")) {
 			statement.setInt(1, facturaId);
-			var resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getTimestamp("fecha_emision");
 			}
@@ -103,10 +103,10 @@ public class Database {
 	}
 
 	public static float obtenerMontoFactura(int facturaId) throws SQLException {
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call monto_f(?)}")) {
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call monto_f(?)}")) {
 			statement.setInt(1, facturaId);
-			var resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getFloat("monto");
 			}
@@ -126,9 +126,9 @@ public class Database {
 
 	public static List<Turno> obtenerTurnos() throws SQLException {
 		List<Turno> turnos = new ArrayList<>();
-		try (var connection = getConnection();
-			 var statement = connection.prepareCall("{call obtenerTurnos()}")) {
-			var resultSet = statement.executeQuery();
+		try (Connection connection = getConnection();
+			 CallableStatement statement = connection.prepareCall("{call obtenerTurnos()}")) {
+			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				var fecha = resultSet.getDate("fecha");
 				var detalles = resultSet.getString("detalles");
@@ -141,10 +141,10 @@ public class Database {
 
 	public static Object[] obtenerTurnos(Date fecha) throws SQLException {
 		List<Turno> turnosList = new ArrayList<>();
-		try (var connection = getConnection();
-			 var statement = connection.prepareStatement("SELECT * FROM turnos WHERE DATE(fecha) = ?")) {
+		try (Connection connection = getConnection();
+			 PreparedStatement statement = connection.prepareStatement("SELECT * FROM turnos WHERE DATE(fecha) = ?")) {
 			statement.setDate(1, new java.sql.Date(fecha.getTime()));
-			var resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				var fechaTurno = resultSet.getDate("fecha");
 				var detalles = resultSet.getString("detalles");
@@ -159,8 +159,8 @@ public class Database {
 	}
 
 	public static void deleteTurno(Turno t) {
-		try (var connection = getConnection();
-			 var statement = connection.prepareStatement("DELETE FROM turnos WHERE fecha = ? AND detalles = ?")) {
+		try (Connection connection = getConnection();
+			 PreparedStatement statement = connection.prepareStatement("DELETE FROM turnos WHERE fecha = ? AND detalles = ?")) {
 			statement.setDate(1, t.getFecha());
 			statement.setString(2, t.getDetalles());
 			statement.executeUpdate();
