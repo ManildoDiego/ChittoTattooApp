@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Turnos:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Turnos_jar</output-path>
+    <root id="archive" name="Turnos.jar">
+      <element id="module-output" name="Turnos" />
+    </root>
+  </artifact>
+</component>
